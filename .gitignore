@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/PyUnpivot
+/.vs/PyRearrangeVolumeData/FileContentIndex
+/.vs/PyRearrangeVolumeData/v17
+/.vs

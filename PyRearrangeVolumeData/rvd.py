@@ -50,8 +50,9 @@ class Rvd:
           if os.path.isfile(os.path.join(folder,f)):
               return # file is not zipped in a folder
           else : 
-              self.unzipFolder = os.path.join(folder,f) # update the unzipped folder
-              return 
+              if f != "__MACOSX": # directory is not the resource fork
+                self.unzipFolder = os.path.join(folder,f) # update the unzipped folder
+                return 
 
   def DetectHeaderAndPipe(self,filename):
       # some files have the header some not, some are ',' separated some are fixed width

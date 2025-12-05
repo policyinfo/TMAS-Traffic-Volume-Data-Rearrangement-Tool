@@ -83,23 +83,23 @@ class Rvd:
                'Hour_12':'str','Hour_13':'str','Hour_14':'str','Hour_15':'str',
                'Hour_16':'str','Hour_17':'str','Hour_18':'str','Hour_19':'str',
                'Hour_20':'str','Hour_21':'str','Hour_22':'str','Hour_23':'str','Restrictions':'str'}
-      # cols for |
-#3|02|1R|000101|1|1|21|12|01|4|00007|00005|00008|00002|00003|00010|00004|00005|00009|00007|00014|00014|00015|00021|00017|00015|00011|00014|00005|00004|00010|00004|00004|00009|0
-      colspecs = [(0,1),(2,4),(5,7),(8,14),(15,16),(17,18),(19,21),(22,24),(25,27),(28,29),
-                  (30,35),(36,41),(42,47),(48,53),(54,59),(60,65),(66,71),(72,77),(78,83),(84,89),(90,95),(96,101),
-                  (102,107),(108,113),(114,119),(120,125),(126,131),(132,137),(138,143),(144,149),(150,155),(156,161),(162,167),(168,173),(174,175)
-                  ]
+      # Shuqing Wang - 12/5/2025 - Fix the | format reading issue by using read_csv
+      # no cols for |, as will be read as csv
       # cols for fixed width
 #3021R0001011119010720000400007000030000000001000040000700006000070000400020000190001800021000160002600015000160000600009000150001200004000070
-      if r[1] == False:
-        colspecs = [(0,1),(1,3),(3,5),(5,11),(11,12),(12,13),(13,15),(15,17),(17,19),(19,20),
+      colspecs = [(0,1),(1,3),(3,5),(5,11),(11,12),(12,13),(13,15),(15,17),(17,19),(19,20),
                     (20,25),(25,30),(30,35),(35,40),(40,45),(45,50),(50,55),(55,60),(60,65),(65,70),(70,75),(75,80),
                     (80,85),(85,90),(90,95),(95,100),(100,105),(105,110),(110,115),(115,120),(120,125),(125,130),(130,135),(135,140),(140,141)
                     ]
-      if r[0] :
-        df = pd.read_fwf(self.unzipFolder + '/' + filename,names=columnNames,dtype=columnTypes,colspecs = colspecs, header = 0)
+      header = 0 # default with header, so to skip the first line
+      if r[0] == False:
+          header = None  # if no header detected, do not skip the first line
+        
+      if r[1] :   # pipe delimited
+        df = pd.read_csv(self.unzipFolder + '/' + filename,sep="|", names=columnNames,dtype=columnTypes,header = header)
       else:
-        df = pd.read_fwf(self.unzipFolder + '/' + filename,names=columnNames,dtype=columnTypes,colspecs = colspecs)
+        df = pd.read_fwf(self.unzipFolder + '/' + filename,names=columnNames,dtype=columnTypes,colspecs = colspecs,header = header)
+      # Shuqing Wang - 12/5/2025 - The fix ends
       total = len(df)
       dfu3 = df
       if unpivot == 'Y':
